@@ -25,15 +25,6 @@ TODO
 * Run `npm init` (or `yarn init`)
 * Replace this README with your own
 
-## Developing
-
-You can see your component in a browser by running it in `dev` mode which will run rollup in watch mode and serve the resulting html.
-
-It doesn't currently live-reload, you'll have to refresh.
-
-```js
-npm run dev // Runs on port 12001 by default.
-```
 
 ## Consuming components
 

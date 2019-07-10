@@ -1,32 +1,26 @@
 import svelte from 'rollup-plugin-svelte';
 import pkg from './package.json';
-import serve from 'rollup-plugin-serve';
-import html from '@gen/rollup-plugin-generate-html';
-import resolve from 'rollup-plugin-node-resolve';
+import browsersync from "rollup-plugin-browsersync";
+
+const watch = process.env.WATCH
 
 const name = pkg.name
 	.replace(/^(@\S+\/)?(svelte-)?(\S+)/, '$3')
 	.replace(/^\w/, m => m.toUpperCase())
 	.replace(/-\w/g, m => m[1].toUpperCase());
 
+const mainpath = watch ? pkg.main.replace('dist', 'docs') : pkg.main
+
 export default {
-	input: process.env.SERVE ? 'src/dev.js' : 'src/Component.svelte',
+	input: 'src/component.svelte',
 	output: [
-		{ file: pkg.main, format: 'umd', name },
-		...process.env.SERVE ? [] : [ { file: pkg.module, format: 'es' } ]
+		{ file: pkg.module, 'format': 'es' },
+		{ file: mainpath, 'format': 'umd', name }
 	],
 	plugins: [
 		svelte(),
-		resolve(),
-		...process.env.SERVE ? [
-			html({
-				publicPath: 'dist',
-				template: './src/dev.html'
-			}),
-			serve({
-				contentBase: 'dist',
-				port: 12001
-			})
-		] : []
+
+		watch && browsersync({ server: "docs" })
 	]
 };
+
